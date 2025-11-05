@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calcular días y edad</title>
+    
+</head>
+<body>
+
+    <h2>Calcular días para tu cumpleaños </h2>
+
+    <label for="fecha">Fecha de nacimiento:</label>
+    <input type="date" id="fecha" name="fecha">
+    <input type="button" value="Comprobar" onclick="miFuncion()">
+
+    <div id="resultado"></div>
+
+    <script>
+        function miFuncion() {
+            const fechaInput = document.getElementById("fecha").value;
+            const resultado = document.getElementById("resultado");
+
+            if (!fechaInput) {
+                resultado.innerHTML = "<p style='color:red;'>Por favor, introduce tu fecha de nacimiento.</p>";
+                return;
+            }
+
+            const nacimiento = new Date(fechaInput);
+            const ahora = new Date(Date.now());
+            const añoActual = ahora.getFullYear();
+
+            let edad = añoActual - nacimiento.getFullYear();
+            const mes = ahora.getMonth() - nacimiento.getMonth();
+            if (mes < 0 || (mes === 0 && ahora.getDate() < nacimiento.getDate())) {
+                edad--;
+            }
+
+            let proximoCumple = new Date(añoActual, nacimiento.getMonth(), nacimiento.getDate());
+            if (proximoCumple < ahora) {
+                proximoCumple = new Date(añoActual + 1, nacimiento.getMonth(), nacimiento.getDate());
+            }
+
+            const diferenciaMs = proximoCumple - ahora;
+            const diasRestantes = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
+
+            resultado.innerHTML = `
+                <p>Tienes: ${edad} años.</p>
+                <p>${edad >= 18 ? "Eres mayor de edad " : "Eres menor de edad "}</p>
+                <p>Faltan: ${diasRestantes} días para tu próximo cumpleaños </p>
+            `;
+        }
+    </script>
+
+</body>
+</html>
